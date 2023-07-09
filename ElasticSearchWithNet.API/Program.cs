@@ -1,6 +1,8 @@
 using Elasticsearch.Net;
 using Nest;
 using ElasticSearchWithNet.API.Extensions;
+using ElasticSearchWithNet.API.Repositories;
+using ElasticSearchWithNet.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddElastic(builder.Configuration);
 
+builder.Services.AddScoped<ProductRepository>();
+builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();
 
