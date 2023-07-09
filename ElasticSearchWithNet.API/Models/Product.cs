@@ -1,4 +1,5 @@
-﻿using Nest;
+﻿using ElasticSearchWithNet.API.DTOs;
+using Nest;
 
 namespace ElasticSearchWithNet.API.Models
 {
@@ -13,5 +14,22 @@ namespace ElasticSearchWithNet.API.Models
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
         public ProductFeature Feature { get; set; }
+
+
+
+        //for mapping Model to Dto
+        public ProductDto CreateDto()
+        {
+            if (Feature == null)
+            {
+                return new ProductDto(Id,Name,Price,Stock,null);
+            }
+            return new ProductDto(Id, Name, Price, Stock, 
+                new ProductFeatureDto(
+                Feature.Width,
+                Feature.Height,
+                Feature.Color
+                ));
+        }
     }
 }
