@@ -68,6 +68,14 @@ namespace ElasticSearchWithNet.API.Repositories
         }
 
 
+        public async Task<bool> DeleteAsync(string id)
+        {
+            var response = await _client.DeleteAsync<Product>(id,x=>x.Index(indexName)); 
+
+            return response.IsValid;
+        }
+
+
 
 
 
