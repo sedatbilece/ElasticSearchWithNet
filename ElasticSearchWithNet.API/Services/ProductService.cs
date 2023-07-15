@@ -74,10 +74,12 @@ namespace ElasticSearchWithNet.API.Services
 
         public async Task<ResponseDto<bool>> DeleteAsync(string id)
         {
-            var isSuccess = await _productRepository.DeleteAsync(id);
+            var deleteResponse = await _productRepository.DeleteAsync(id);
 
-            if (!isSuccess)
+            if(!deleteResponse.IsValid && deleteResponse.Result == Result.NotFound)
+            {
                 return ResponseDto<bool>.Fail("ürün silinemedi", System.Net.HttpStatusCode.NotFound);
+            }
 
             return ResponseDto<bool>.Success(true, System.Net.HttpStatusCode.NoContent);
         }
