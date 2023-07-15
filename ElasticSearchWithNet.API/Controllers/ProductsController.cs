@@ -35,6 +35,13 @@ namespace ElasticSearchWithNet.API.Controllers
             return CreateActionResult(await _productService.GetByIdAsync(id));
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync(ProductUpdateDto updateDto)
+        {
+
+            return CreateActionResult(await _productService.UpdateAsync(updateDto));
+        }
+
 
     }
 }
