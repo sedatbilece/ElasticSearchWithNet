@@ -1,6 +1,7 @@
-﻿using ElasticSearchWithNet.API.DTOs;
+﻿using Elastic.Clients.Elasticsearch;
+using ElasticSearchWithNet.API.DTOs;
 using ElasticSearchWithNet.API.Models;
-using Nest;
+
 using System.Collections.Immutable;
 
 namespace ElasticSearchWithNet.API.Repositories
@@ -8,9 +9,9 @@ namespace ElasticSearchWithNet.API.Repositories
     public class ProductRepository
     {
 
-        private readonly ElasticClient _client;
+        private readonly ElasticsearchClient _client;
         private const string indexName = "products";
-        public ProductRepository(ElasticClient client)
+        public ProductRepository(ElasticsearchClient client)
         {
             _client = client;
         }
@@ -23,7 +24,7 @@ namespace ElasticSearchWithNet.API.Repositories
             var response = await _client.IndexAsync(newProduct, x => x.Index(indexName).Id(Guid.NewGuid().ToString()));
             
             //fast fail
-            if (!response.IsValid) return null;
+            if (!response.IsSuccess()) return null;
 
 
             newProduct.Id=response.Id;
@@ -50,7 +51,7 @@ namespace ElasticSearchWithNet.API.Repositories
         {
             var response = await _client.GetAsync<Product>(id, x => x.Index(indexName));
 
-            if (!response.IsValid)
+            if (!response.IsSuccess())
                 return null;
 
             response.Source.Id= response.Id;
@@ -61,10 +62,9 @@ namespace ElasticSearchWithNet.API.Repositories
 
         public async Task<bool> UpdateAsync(ProductUpdateDto updateDto)
         {
-            var response = await _client.UpdateAsync<Product, ProductUpdateDto>(updateDto.Id, 
-                x => x.Index(indexName).Doc(updateDto));
+            var response = await _client.UpdateAsync<Product, ProductUpdateDto>(indexName, updateDto.Id, x => x.Doc(updateDto));
 
-            return response.IsValid;
+            return response.IsSuccess();
         }
 
 

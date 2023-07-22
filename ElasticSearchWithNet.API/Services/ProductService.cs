@@ -1,7 +1,8 @@
-﻿using ElasticSearchWithNet.API.DTOs;
+﻿using Elastic.Clients.Elasticsearch;
+using ElasticSearchWithNet.API.DTOs;
 using ElasticSearchWithNet.API.Models;
 using ElasticSearchWithNet.API.Repositories;
-using Nest;
+
 using System.Collections.Immutable;
 using System.Drawing;
 
@@ -76,7 +77,7 @@ namespace ElasticSearchWithNet.API.Services
         {
             var deleteResponse = await _productRepository.DeleteAsync(id);
 
-            if(!deleteResponse.IsValid && deleteResponse.Result == Result.NotFound)
+            if(!deleteResponse.IsSuccess() && deleteResponse.Result == Result.NotFound)
             {
                 return ResponseDto<bool>.Fail("ürün silinemedi", System.Net.HttpStatusCode.NotFound);
             }

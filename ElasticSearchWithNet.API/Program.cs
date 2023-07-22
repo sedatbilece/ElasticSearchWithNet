@@ -1,5 +1,4 @@
-using Elasticsearch.Net;
-using Nest;
+
 using ElasticSearchWithNet.API.Extensions;
 using ElasticSearchWithNet.API.Repositories;
 using ElasticSearchWithNet.API.Services;
